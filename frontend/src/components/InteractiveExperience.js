@@ -146,9 +146,9 @@ const InteractiveExperience = () => {
                           onClick={() => toggleJobExpansion(index)}
                         >
                           <div className="flex items-center justify-between">
-                            <div className={`flex items-center gap-3 ${isEven ? 'md:flex-row-reverse' : ''}`}>
+                            <div className="flex items-center gap-3">
                               <div className="text-2xl">{getRoleIcon(job.role)}</div>
-                              <div className={isEven ? 'md:text-right' : ''}>
+                              <div>
                                 <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors duration-300">
                                   {job.role}
                                 </h3>
@@ -165,7 +165,7 @@ const InteractiveExperience = () => {
                             </div>
                           </div>
                           
-                          <div className={`flex flex-wrap items-center gap-4 text-slate-600 mt-3 ${isEven ? 'md:justify-end' : ''}`}>
+                          <div className="flex flex-wrap items-center gap-4 text-slate-600 mt-3">
                             <div className="flex items-center gap-1">
                               <Calendar size={16} />
                               <span className="text-sm">{job.duration}</span>
@@ -181,7 +181,7 @@ const InteractiveExperience = () => {
 
                           {/* Quick Metrics */}
                           {metrics.length > 0 && (
-                            <div className={`flex gap-4 mt-4 ${isEven ? 'md:justify-end' : ''}`}>
+                            <div className="flex gap-4 mt-4">
                               {metrics.map((metric, metricIndex) => (
                                 <div key={metricIndex} className="bg-blue-50 px-3 py-2 rounded-lg">
                                   <div className="text-lg font-bold text-blue-600">{metric.value}</div>
