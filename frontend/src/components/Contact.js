@@ -1,71 +1,76 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
 import { Badge } from './ui/badge';
-import { Mail, Phone, Linkedin, MapPin, Send, CheckCircle } from 'lucide-react';
+import { Mail, Phone, Linkedin, MapPin, CheckCircle, Copy, ExternalLink } from 'lucide-react';
 import { portfolioData } from '../data/mock';
 import { useToast } from '../hooks/use-toast';
 
 const Contact = () => {
   const { personal } = portfolioData;
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate form submission (replace with actual API call)
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setFormData({ name: '', email: '', subject: '', message: '' });
+  const copyToClipboard = async (text, type) => {
+    try {
+      await navigator.clipboard.writeText(text);
       toast({
-        title: "Message sent successfully!",
-        description: "Thank you for reaching out. I'll get back to you soon.",
+        title: `${type} copied!`,
+        description: `${text} has been copied to your clipboard.`,
       });
-    }, 1000);
+    } catch (err) {
+      toast({
+        title: "Copy failed",
+        description: "Unable to copy to clipboard. Please copy manually.",
+        variant: "destructive"
+      });
+    }
   };
 
-  const contactInfo = [
+  const contactMethods = [
     {
       icon: Mail,
-      label: "Email",
+      title: "Email",
       value: personal.email,
-      href: `mailto:${personal.email}`
+      description: "Best way to reach me for opportunities",
+      primaryAction: {
+        label: "Send Email",
+        href: `mailto:${personal.email}?subject=Professional Inquiry`,
+        external: false
+      },
+      secondaryAction: {
+        label: "Copy Email",
+        action: () => copyToClipboard(personal.email, "Email")
+      }
     },
     {
       icon: Phone,
-      label: "Phone",
+      title: "Phone",
       value: personal.phone,
-      href: `tel:${personal.phone}`
+      description: "Available for calls during business hours",
+      primaryAction: {
+        label: "Call Now",
+        href: `tel:${personal.phone}`,
+        external: false
+      },
+      secondaryAction: {
+        label: "Copy Number",
+        action: () => copyToClipboard(personal.phone, "Phone number")
+      }
     },
     {
       icon: Linkedin,
-      label: "LinkedIn",
-      value: "Connect with me",
-      href: personal.linkedin
-    },
-    {
-      icon: MapPin,
-      label: "Location",
-      value: personal.location,
-      href: null
+      title: "LinkedIn",
+      value: "Professional Network",
+      description: "Connect and view my professional updates",
+      primaryAction: {
+        label: "View Profile",
+        href: personal.linkedin,
+        external: true
+      },
+      secondaryAction: {
+        label: "Copy Link",
+        action: () => copyToClipboard(personal.linkedin, "LinkedIn URL")
+      }
     }
   ];
 
@@ -79,150 +84,88 @@ const Contact = () => {
               Contact
             </Badge>
             <h2 className="text-4xl font-bold text-slate-900 mb-6">
-              Let's Work Together
+              Let's Connect
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              I'm always interested in discussing new opportunities, 
-              technical challenges, and innovative projects.
+              I'm always interested in discussing new opportunities, technical challenges, 
+              and innovative projects. Reach out through any of these channels.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-12">
-            {/* Contact Information */}
-            <div className="lg:col-span-1">
-              <Card className="h-fit">
-                <CardHeader>
-                  <CardTitle className="text-xl font-semibold text-slate-900">
-                    Get In Touch
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {contactInfo.map((info, index) => (
-                    <div key={index} className="flex items-start gap-4">
-                      <div className="bg-blue-100 p-2 rounded-lg">
-                        <info.icon className="text-blue-600" size={18} />
-                      </div>
-                      <div>
-                        <div className="font-medium text-slate-900 text-sm">
-                          {info.label}
-                        </div>
-                        {info.href ? (
-                          <a 
-                            href={info.href}
-                            className="text-slate-600 hover:text-blue-600 transition-colors text-sm"
-                            target={info.label === 'LinkedIn' ? '_blank' : undefined}
-                            rel={info.label === 'LinkedIn' ? 'noopener noreferrer' : undefined}
-                          >
-                            {info.value}
-                          </a>
-                        ) : (
-                          <div className="text-slate-600 text-sm">{info.value}</div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="pt-6 border-t border-slate-200">
-                    <h4 className="font-medium text-slate-900 mb-3">Availability</h4>
-                    <div className="flex items-center gap-2 text-sm">
-                      <CheckCircle className="text-green-600" size={16} />
-                      <span className="text-slate-600">Available for new opportunities</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm mt-2">
-                      <CheckCircle className="text-green-600" size={16} />
-                      <span className="text-slate-600">Open to consulting projects</span>
-                    </div>
+          {/* Contact Methods Grid */}
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {contactMethods.map((method, index) => (
+              <Card key={index} className="hover:shadow-lg transition-all duration-300 hover:transform hover:scale-105">
+                <CardHeader className="text-center pb-4">
+                  <div className="bg-blue-100 p-4 rounded-2xl w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                    <method.icon className="text-blue-600" size={32} />
                   </div>
+                  <CardTitle className="text-xl font-semibold text-slate-900">
+                    {method.title}
+                  </CardTitle>
+                  <p className="text-slate-600 font-medium">{method.value}</p>
+                  <p className="text-sm text-slate-500 mt-2">{method.description}</p>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Button
+                    asChild={!!method.primaryAction.href}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                    onClick={!method.primaryAction.href ? method.primaryAction.action : undefined}
+                  >
+                    {method.primaryAction.href ? (
+                      <a 
+                        href={method.primaryAction.href}
+                        target={method.primaryAction.external ? "_blank" : undefined}
+                        rel={method.primaryAction.external ? "noopener noreferrer" : undefined}
+                      >
+                        {method.primaryAction.label}
+                        {method.primaryAction.external && <ExternalLink className="ml-2" size={16} />}
+                      </a>
+                    ) : (
+                      method.primaryAction.label
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={method.secondaryAction.action}
+                    className="w-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                  >
+                    <Copy className="mr-2" size={16} />
+                    {method.secondaryAction.label}
+                  </Button>
                 </CardContent>
               </Card>
+            ))}
+          </div>
+
+          {/* Additional Info */}
+          <div className="bg-slate-50 rounded-2xl p-8">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-semibold text-slate-900 mb-4">
+                Current Availability
+              </h3>
+              <div className="flex flex-wrap justify-center gap-6">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="text-green-600" size={20} />
+                  <span className="text-slate-600">Available for new opportunities</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="text-green-600" size={20} />
+                  <span className="text-slate-600">Open to consulting projects</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="text-blue-600" size={20} />
+                  <span className="text-slate-600">{personal.location}</span>
+                </div>
+              </div>
             </div>
 
-            {/* Contact Form */}
-            <div className="lg:col-span-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-xl font-semibold text-slate-900">
-                    Send a Message
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">
-                          Name *
-                        </label>
-                        <Input
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          placeholder="Your full name"
-                          required
-                          className="w-full"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">
-                          Email *
-                        </label>
-                        <Input
-                          name="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          placeholder="your.email@example.com"
-                          required
-                          className="w-full"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">
-                        Subject *
-                      </label>
-                      <Input
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleInputChange}
-                        placeholder="What would you like to discuss?"
-                        required
-                        className="w-full"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">
-                        Message *
-                      </label>
-                      <Textarea
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        placeholder="Tell me more about your project or opportunity..."
-                        required
-                        rows={6}
-                        className="w-full"
-                      />
-                    </div>
-
-                    <Button 
-                      type="submit" 
-                      disabled={isSubmitting}
-                      className="bg-blue-600 hover:bg-blue-700 text-white w-full md:w-auto"
-                    >
-                      {isSubmitting ? (
-                        "Sending..."
-                      ) : (
-                        <>
-                          <Send className="mr-2" size={16} />
-                          Send Message
-                        </>
-                      )}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
+            <div className="bg-white rounded-lg p-6">
+              <h4 className="font-semibold text-slate-900 mb-3 text-center">Preferred Contact Method</h4>
+              <p className="text-slate-600 text-center leading-relaxed">
+                For the fastest response, please reach out via <strong>email</strong>. I typically respond 
+                within 24 hours during business days. For urgent matters, feel free to call directly.
+              </p>
             </div>
           </div>
         </div>
