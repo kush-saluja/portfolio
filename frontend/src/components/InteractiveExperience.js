@@ -72,16 +72,16 @@ const InteractiveExperience = () => {
 
   const extractMetrics = (achievements) => {
     const metrics = [];
-    achievements.forEach(achievement => {
-      const percentMatch = achievement.match(/(\d+)%/);
-      const numberMatch = achievement.match(/(\d+(?:,\d+)*)/);
-      if (percentMatch) {
-        metrics.push({ value: percentMatch[1] + '%', type: 'percentage' });
-      } else if (numberMatch && !percentMatch) {
-        metrics.push({ value: numberMatch[1], type: 'number' });
-      }
-    });
-    return metrics.slice(0, 2); // Show max 2 metrics
+    // achievements.forEach(achievement => {
+    //   const percentMatch = achievement.match(/(\d+)%/);
+    //   const numberMatch = achievement.match(/(\d+(?:,\d+)*)/);
+    //   if (percentMatch) {
+    //     metrics.push({ value: percentMatch[1] + '%', type: 'percentage' });
+    //   } else if (numberMatch && !percentMatch) {
+    //     metrics.push({ value: numberMatch[1], type: 'number' });
+    //   }
+    // });
+    return metrics; // Show max 2 metrics
   };
 
   return (
