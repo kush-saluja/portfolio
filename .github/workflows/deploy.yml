@@ -23,6 +23,11 @@ jobs:
           cd frontend
           npm install --legacy-peer-deps
 
+      - name: Fix ajv version for craco/react-scripts
+        run: |
+          cd frontend
+          npm install ajv@^8.12.0 ajv-keywords@^5.1.0 --save-dev
+
       - name: Build
         run: |
           cd frontend
