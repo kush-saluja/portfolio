@@ -203,13 +203,13 @@ const InteractiveExperience = () => {
                           <div className="space-y-6">
                             {/* Key Achievements */}
                             <div>
-                              <div className="flex items-center gap-2 mb-4">
+                              <div className={`flex items-center gap-2 mb-4 ${isEven ? 'justify-end' : ''}`}>
                                 <Award className="text-green-600" size={16} />
                                 <h4 className="font-semibold text-slate-900">Key Achievements</h4>
                               </div>
                               <div className="space-y-3">
                                 {job.achievements.slice(0, 3).map((achievement, achievementIndex) => (
-                                  <div key={achievementIndex} className="flex items-start gap-3">
+                                  <div key={achievementIndex} className={`flex items-start gap-3 ${isEven ? 'flex-row-reverse text-right' : ''}`}>
                                     <TrendingUp className="text-green-600 mt-0.5 flex-shrink-0" size={16} />
                                     <p className="text-slate-600 text-sm leading-relaxed">
                                       {achievement}
@@ -221,10 +221,10 @@ const InteractiveExperience = () => {
 
                             {/* Technologies */}
                             <div>
-                              <h4 className="font-semibold text-slate-900 mb-3">
+                              <h4 className={`font-semibold text-slate-900 mb-3 ${isEven ? 'text-right' : ''}`}>
                                 Technologies Used
                               </h4>
-                              <div className="flex flex-wrap gap-2">
+                              <div className={`flex flex-wrap gap-2 ${isEven ? 'justify-end' : ''}`}>
                                 {job.technologies.slice(0, 6).map((tech, techIndex) => (
                                   <Badge 
                                     key={techIndex}
