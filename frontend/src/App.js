@@ -4,8 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import About from "./components/About";
-import Experience from "./components/Experience";
-import Skills from "./components/Skills";
+import InteractiveExperience from "./components/InteractiveExperience";
+import InteractiveSkills from "./components/InteractiveSkills";
+import Projects from "./components/Projects";
 import Education from "./components/Education";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
@@ -18,8 +19,9 @@ const Home = () => {
       <main>
         <Hero />
         <About />
-        <Experience />
-        <Skills />
+        <InteractiveExperience />
+        <InteractiveSkills />
+        <Projects />
         <Education />
         <Contact />
       </main>
