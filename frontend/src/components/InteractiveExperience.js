@@ -145,10 +145,10 @@ const InteractiveExperience = () => {
                           className="pb-4"
                           onClick={() => toggleJobExpansion(index)}
                         >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
+                          <div className={`flex items-center ${isEven ? 'justify-end' : 'justify-between'}`}>
+                            <div className={`flex items-center gap-3 ${isEven ? 'flex-row-reverse' : ''}`}>
                               <div className="text-2xl">{getRoleIcon(job.role)}</div>
-                              <div>
+                              <div className={isEven ? 'text-right' : ''}>
                                 <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors duration-300">
                                   {job.role}
                                 </h3>
@@ -157,15 +157,17 @@ const InteractiveExperience = () => {
                                 </div>
                               </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                              {isExpanded ? 
-                                <ChevronUp className="text-slate-400 group-hover:text-blue-600 transition-colors duration-300" size={20} /> :
-                                <ChevronDown className="text-slate-400 group-hover:text-blue-600 transition-colors duration-300" size={20} />
-                              }
-                            </div>
+                            {!isEven && (
+                              <div className="flex items-center gap-2">
+                                {isExpanded ? 
+                                  <ChevronUp className="text-slate-400 group-hover:text-blue-600 transition-colors duration-300" size={20} /> :
+                                  <ChevronDown className="text-slate-400 group-hover:text-blue-600 transition-colors duration-300" size={20} />
+                                }
+                              </div>
+                            )}
                           </div>
                           
-                          <div className="flex flex-wrap items-center gap-4 text-slate-600 mt-3">
+                          <div className={`flex flex-wrap items-center gap-4 text-slate-600 mt-3 ${isEven ? 'justify-end' : ''}`}>
                             <div className="flex items-center gap-1">
                               <Calendar size={16} />
                               <span className="text-sm">{job.duration}</span>
@@ -181,7 +183,7 @@ const InteractiveExperience = () => {
 
                           {/* Quick Metrics */}
                           {metrics.length > 0 && (
-                            <div className="flex gap-4 mt-4">
+                            <div className={`flex gap-4 mt-4 ${isEven ? 'justify-end' : ''}`}>
                               {metrics.map((metric, metricIndex) => (
                                 <div key={metricIndex} className="bg-blue-50 px-3 py-2 rounded-lg">
                                   <div className="text-lg font-bold text-blue-600">{metric.value}</div>
